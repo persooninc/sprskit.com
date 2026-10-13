@@ -55,6 +55,31 @@ try {
 
   const bad = await fetch(`${base}/api/score?unmet5=40&unmet3=40&unmet1=40`);
   assert(bad.status === 400, `expected 400, got ${bad.status}`);
+
+  const health = await fetch(`${base}/healthz`);
+  const healthBody = await health.json();
+  assert(health.status === 200, `healthz status ${health.status}`);
+  assert(healthBody.ok === true, "healthz not ok");
+  assert(
+    healthBody.commit === "unknown" || /^[0-9a-f]{12}$/.test(healthBody.commit),
+    `healthz commit ${healthBody.commit}`,
+  );
+
+  const robots = await fetch(`${base}/robots.txt`);
+  const robotsBody = await robots.text();
+  assert(robots.status === 200, `robots status ${robots.status}`);
+  assert(robotsBody.includes("Disallow: /api/"), "robots missing /api/");
+  assert(robotsBody.includes("Disallow: /healthz"), "robots missing /healthz");
+  assert(robotsBody.includes("Sitemap: https://sprskit.vercel.app/sitemap.xml"), "robots sitemap host");
+  assert(!robotsBody.includes("sprskit.com"), "robots advertised the apex");
+
+  const sitemap = await fetch(`${base}/sitemap.xml`);
+  const xml = await sitemap.text();
+  assert(sitemap.status === 200, `sitemap status ${sitemap.status}`);
+  assert(xml.includes("<loc>https://sprskit.vercel.app/</loc>"), "sitemap loc");
+  assert(!xml.includes("sprskit.com"), "sitemap advertised the apex");
+  assert(!xml.includes("/healthz"), "sitemap listed healthz");
+  assert(!xml.includes("/api/"), "sitemap listed the score API");
   console.log("smoke ok");
 } catch (error) {
   console.error(server.readLogs());

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --import ./test/jsx-register.mjs --test lib/score.test.js lib/analytics.test.js test/routes.test.js",
+    "test": "node --import ./test/jsx-register.mjs --test lib/score.test.js lib/analytics.test.js lib/crawl.test.js test/routes.test.js",
     "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
