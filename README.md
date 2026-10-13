@@ -7,7 +7,15 @@ This is not an official SPRS submission, not a CMMC assessment, and not legal or
 ```bash
 npm install
 npm test
+npm run build
 npm run smoke
 ```
 
-DNS for sprskit.com is not changed from this repo. A Vercel preview can host the same build. Do not add a custom domain or a Stripe price here.
+| Doc | What it is |
+|---|---|
+| [TECHSTACK.md](TECHSTACK.md) | Runtime, routes, host |
+| [ACCOUNTS.md](ACCOUNTS.md) | Account names only |
+| [docs/VISION.md](docs/VISION.md) | What the page is for |
+| [docs/deck/index.html](docs/deck/index.html) | Short deck |
+
+DNS for sprskit.com is an owner step. This repo does not attach a custom domain or a Stripe price. The live preview host is https://sprskit.vercel.app.
