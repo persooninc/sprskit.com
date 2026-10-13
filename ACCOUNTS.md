@@ -8,5 +8,6 @@ Names and roles only. No keys, tokens, or dashboard secrets.
 | Vercel team `dhillonrs`, project `sprskit` | Host for `https://sprskit.vercel.app`. No custom domain attached by an agent. |
 | Cloudflare zone `sprskit.com` | Nameservers for the domain. DNS changes are an owner step. |
 | sprs.sh (GitHub `persooninc/sprs-sh`) | The paid NIST 800-171 kit. This site only links there. |
+| Google Analytics 4 | Not provisioned. The site reads `NEXT_PUBLIC_GA_MEASUREMENT_ID` and sends nothing until an owner sets a real id on Vercel. |
 | Stripe | Not used on this site. Do not add a price. |
 | Database | Not used. The worksheet does not store answers. |

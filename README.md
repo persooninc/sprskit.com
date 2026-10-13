@@ -18,4 +18,6 @@ npm run smoke
 | [docs/VISION.md](docs/VISION.md) | What the page is for |
 | [docs/deck/index.html](docs/deck/index.html) | Short deck |
 
-DNS for sprskit.com is an owner step. This repo does not attach a custom domain or a Stripe price. The live preview host is https://sprskit.vercel.app.
+DNS for sprskit.com is an owner step. This repo does not attach a custom domain or a Stripe price. The live host is https://sprskit.vercel.app.
+
+Google Analytics loads only when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is a real `G-` id. See `.env.example`. The placeholder disables the tag. Vercel Web Analytics stays off.

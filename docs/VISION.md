@@ -6,4 +6,6 @@ The page does not decide which requirements fall in which bucket. It does not ap
 
 The paid self-assessment kit (worksheet, SSP outline, POA&M) stays on sprs.sh. sprskit.com is the free arithmetic step in front of that kit, not a second product and not a second price.
 
-Out of scope for agent sessions: DNS changes, new paid infrastructure, Stripe prices, app-store builds, and spending money. Pointing sprskit.com at the Vercel project is an owner morning item.
+Page views and a `score_calculated` event (shown score and whether the floor applied) go to GA4 only after an owner sets a measurement id. Requirement counts are not sent.
+
+Out of scope for agent sessions: DNS changes, creating the GA4 property, new paid infrastructure, Stripe prices, app-store builds, and spending money. Pointing sprskit.com at the Vercel project is an owner morning item.

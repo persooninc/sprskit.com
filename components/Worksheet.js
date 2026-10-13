@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { EVENTS, track } from "../lib/analytics";
 import { computeScore } from "../lib/score";
 
 const empty = { unmet5: "0", unmet3: "0", unmet1: "0" };
@@ -11,7 +12,11 @@ export default function Worksheet() {
 
   function onSubmit(event) {
     event.preventDefault();
-    setResult(computeScore(values));
+    const next = computeScore(values);
+    setResult(next);
+    if (next.ok) {
+      track(EVENTS.scoreCalculated, { shown: next.shown, floored: next.floored });
+    }
   }
 
   function setField(name, value) {
