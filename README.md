@@ -20,6 +20,6 @@ npm run smoke
 
 DNS for sprskit.com is an owner step. This repo does not attach a custom domain or a Stripe price. The live host is https://sprskit.vercel.app.
 
-`/robots.txt` allows the worksheet and disallows `/api/` and `/healthz`. `/sitemap.xml` lists only `https://sprskit.vercel.app/`. `lastmod` is the git commit date of `app/page.js`, not the deploy clock. The apex is not in either file until an owner sets `SITE_ORIGIN` after DNS answers. `/healthz` reports `commit` from `VERCEL_GIT_COMMIT_SHA` (first 12 hex characters) or `unknown`.
+`/robots.txt` allows the worksheet and disallows `/api/` and `/healthz`. `/sitemap.xml` lists only `https://sprskit.vercel.app/`. `lastmod` is the git commit date of `app/page.js`, baked at build as `SITEMAP_PAGE_LASTMOD`, not the deploy clock. A value that is not `YYYY-MM-DD` is omitted. The apex is not in either file until an owner sets `SITE_ORIGIN` after DNS answers. `/healthz` reports `commit` from `VERCEL_GIT_COMMIT_SHA` (first 12 hex characters) or `unknown`.
 
 Google Analytics loads only when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is a real `G-` id. See `.env.example`. The placeholder disables the tag. Vercel Web Analytics stays off.
