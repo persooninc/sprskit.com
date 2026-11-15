@@ -6,6 +6,8 @@ import { GET as score } from "../app/api/score/route.js";
 import { GET as robots } from "../app/robots.txt/route.js";
 import { GET as sitemap } from "../app/sitemap.xml/route.js";
 import Page from "../app/page.js";
+import { WorksheetResult } from "../components/Worksheet.js";
+import { computeScore } from "../lib/score.js";
 import { metadata } from "../app/layout.js";
 import { LIVE_ORIGIN, sitemapEntries } from "../lib/crawl.js";
 
@@ -88,6 +90,37 @@ test("GET / renders the worksheet and the paid-kit boundary", () => {
   assert.match(html, /id="unmet3"/);
   assert.match(html, /id="unmet1"/);
   assert.match(html, /Calculate score/);
+  assert.match(html, /hand-off, not a purchase/);
+  assert.doesNotMatch(html, /<a [^>]*>Continue on sprs\.sh<\/a>/);
+});
+
+function renderResult(input) {
+  return renderToStaticMarkup(WorksheetResult({ result: computeScore(input) }));
+}
+
+test("a valid calculation renders the prefilled Continue on sprs.sh link", () => {
+  const html = renderResult({ unmet5: "3", unmet3: "3", unmet1: "0" });
+  assert.match(html, /<strong>86<\/strong>/);
+  const match = html.match(/<a href="([^"]+)">Continue on sprs\.sh<\/a>/);
+  assert.ok(match, html);
+  const href = match[1];
+  assert.equal(href, "https://sprs.sh/sprs-score-estimator#s1=1.1,1.2,1.5,1.12,1.19,3.2");
+  assert.equal(new URL(href).search, "");
+  assert.equal(href.includes("?"), false);
+});
+
+test("invalid input renders the error and no sprs.sh link", () => {
+  const html = renderResult({ unmet5: "40", unmet3: "40", unmet1: "40" });
+  assert.match(html, /class="error"/);
+  assert.doesNotMatch(html, /Continue on sprs\.sh/);
+  assert.doesNotMatch(html, /sprs\.sh/);
+  assert.equal(renderToStaticMarkup(WorksheetResult({ result: null })), "");
+});
+
+test("counts the estimator cannot hold link to the blank estimator", () => {
+  const html = renderResult({ unmet5: "60", unmet3: "0", unmet1: "0" });
+  assert.match(html, /<a href="https:\/\/sprs\.sh\/sprs-score-estimator">Continue on sprs\.sh<\/a>/);
+  assert.match(html, /opens blank/);
 });
 
 test("the document title names sprskit.com and is not a certification", () => {

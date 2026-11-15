@@ -27,7 +27,9 @@ export default function Page() {
         <p>
           The paid NIST 800-171 self-assessment kit is a different product at{" "}
           <a href="https://sprs.sh">sprs.sh</a>. This site does not sell that kit
-          and does not change its price.
+          and does not change its price. The “Continue on sprs.sh” link after a
+          result only opens the free sprs.sh estimator with your counts in the
+          link; it is a hand-off, not a purchase.
         </p>
       </section>
     </main>

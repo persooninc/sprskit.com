@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { EVENTS, track } from "../lib/analytics";
+import { SPRS_ESTIMATOR_URL, buildSprsHandoffUrl } from "../lib/handoff";
 import { computeScore } from "../lib/score";
 
 const empty = { unmet5: "0", unmet3: "0", unmet1: "0" };
@@ -56,24 +57,51 @@ export default function Worksheet() {
         />
       </label>
       <button type="submit">Calculate score</button>
-      {result && !result.ok && <p className="error">{result.error}</p>}
-      {result && result.ok && (
-        <div className="result">
-          <p className="muted">Shown score</p>
-          <p>
-            <strong>{result.shown}</strong>
-          </p>
-          <p>
-            <code>{result.formula}</code>
-          </p>
-          {result.floored && (
-            <p>
-              The raw total is {result.raw}. The methodology floor shown here is
-              −203. Credits that could change a real score are not applied.
-            </p>
-          )}
-        </div>
-      )}
+      <WorksheetResult result={result} />
     </form>
+  );
+}
+
+// The result block. Renders nothing before a calculation, the error for invalid
+// input, and the score plus the sprs.sh hand-off after a valid calculation.
+export function WorksheetResult({ result }) {
+  if (!result) return null;
+  if (!result.ok) return <p className="error">{result.error}</p>;
+  const handoff = buildSprsHandoffUrl(result);
+  return (
+    <div className="result">
+      <p className="muted">Shown score</p>
+      <p>
+        <strong>{result.shown}</strong>
+      </p>
+      <p>
+        <code>{result.formula}</code>
+      </p>
+      {result.floored && (
+        <p>
+          The raw total is {result.raw}. The methodology floor shown here is
+          −203. Credits that could change a real score are not applied.
+        </p>
+      )}
+      <p className="handoff">
+        <a href={handoff ?? SPRS_ESTIMATOR_URL}>
+          Continue on sprs.sh
+        </a>
+      </p>
+      {handoff ? (
+        <p className="muted">
+          Opens the free sprs.sh estimator with the first requirements of each
+          point value marked not met, so it starts at the same score. Change the
+          ticks to match your own gaps. Your counts travel only in the part of
+          the link after <code>#</code>, which browsers do not send to any
+          server.
+        </p>
+      ) : (
+        <p className="muted">
+          These counts are more than the methodology has requirements of that
+          point value, so the sprs.sh estimator opens blank.
+        </p>
+      )}
+    </div>
   );
 }
