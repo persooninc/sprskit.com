@@ -128,3 +128,8 @@ test("the document title names sprskit.com and is not a certification", () => {
   assert.match(metadata.description, /Not an official assessment/);
   assert.match(metadata.description, /sprs\.sh/);
 });
+
+test("the canonical link points at the host that answers", () => {
+  assert.equal(metadata.metadataBase.href, LIVE_ORIGIN + "/");
+  assert.equal(metadata.alternates.canonical, LIVE_ORIGIN + "/");
+});

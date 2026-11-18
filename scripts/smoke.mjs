@@ -1,5 +1,6 @@
 import { spawn } from "node:child_process";
 import { setTimeout as delay } from "node:timers/promises";
+import { canonicalHref } from "../lib/domain.js";
 
 const port = 3456;
 const base = `http://127.0.0.1:${port}`;
@@ -47,6 +48,11 @@ try {
   assert(html.includes("SPRS score worksheet"), "home missing title");
   assert(html.includes("https://sprs.sh"), "home missing sprs.sh link");
   assert(html.includes("not an official"), "home missing the assessment disclaimer");
+  const canonical = canonicalHref(html);
+  assert(
+    canonical === "https://sprskit.vercel.app/" || canonical === "https://sprskit.vercel.app",
+    `home canonical ${canonical}`,
+  );
 
   const score = await fetch(`${base}/api/score?unmet5=1&unmet3=0&unmet1=0`);
   const body = await score.json();

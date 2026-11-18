@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --import ./test/jsx-register.mjs --test lib/score.test.js lib/analytics.test.js lib/crawl.test.js lib/handoff.test.js test/routes.test.js",
-    "smoke": "node scripts/smoke.mjs"
+    "test": "node --import ./test/jsx-register.mjs --test lib/score.test.js lib/analytics.test.js lib/crawl.test.js lib/handoff.test.js lib/domain.test.js test/routes.test.js",
+    "smoke": "node scripts/smoke.mjs",
+    "smoke:domain": "node scripts/domain-smoke.mjs"
   },
   "dependencies": {
     "next": "^15.5.4",

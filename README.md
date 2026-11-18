@@ -9,7 +9,10 @@ npm install
 npm test
 npm run build
 npm run smoke
+npm run smoke:domain   # read-only GETs against https://sprskit.com, after DNS
 ```
+
+CI (`.github/workflows/ci.yml`) runs the unit tests, the build and `npm run smoke` on every push and PR. Run it by hand with `domain` checked to also run `smoke:domain`.
 
 | Doc | What it is |
 |---|---|
@@ -18,8 +21,8 @@ npm run smoke
 | [docs/VISION.md](docs/VISION.md) | What the page is for |
 | [docs/deck/index.html](docs/deck/index.html) | Short deck |
 
-DNS for sprskit.com is an owner step. This repo does not attach a custom domain or a Stripe price. The live host is https://sprskit.vercel.app.
+DNS for sprskit.com is an owner step. The Vercel project `sprskit` already has `sprskit.com` attached, with `www.sprskit.com` sending a 308 to the apex. The Cloudflare zone needs an `A` record for `sprskit.com` pointing to `76.76.21.21` and a `CNAME` for `www` pointing to `cname.vercel-dns.com`, both DNS only (grey cloud). After DNS answers, set `SITE_ORIGIN=https://sprskit.com` on Vercel Production, redeploy, and run `npm run smoke:domain`. Until then the live host is https://sprskit.vercel.app. This repo does not add a Stripe price.
 
-`/robots.txt` allows the worksheet and disallows `/api/` and `/healthz`. `/sitemap.xml` lists only `https://sprskit.vercel.app/`. `lastmod` is `PAGE_LASTMOD` in `lib/crawl.js`, the git commit date of `app/page.js`. A test fails if that constant drifts. A `SITEMAP_PAGE_LASTMOD` value that is not `YYYY-MM-DD` is ignored. The apex is not in either file until an owner sets `SITE_ORIGIN` after DNS answers. `/healthz` reports `commit` from `VERCEL_GIT_COMMIT_SHA` (first 12 hex characters) or `unknown`.
+`/robots.txt` allows the worksheet and disallows `/api/` and `/healthz`. `/sitemap.xml` lists only `https://sprskit.vercel.app/`. `lastmod` is `PAGE_LASTMOD` in `lib/crawl.js`, the git commit date of `app/page.js`. A test fails if that constant drifts. A `SITEMAP_PAGE_LASTMOD` value that is not `YYYY-MM-DD` is ignored. The apex is not in either file, or in the page's canonical link, until an owner sets `SITE_ORIGIN` after DNS answers. `/healthz` reports `commit` from `VERCEL_GIT_COMMIT_SHA` (first 12 hex characters) or `unknown`.
 
 Google Analytics loads only when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is a real `G-` id. See `.env.example`. The placeholder disables the tag. Vercel Web Analytics stays off.

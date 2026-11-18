@@ -5,7 +5,7 @@ import { transformSync } from "next/dist/build/swc/index.js";
 const root = fileURLToPath(new URL("..", import.meta.url));
 
 export async function load(url, context, nextLoad) {
-  if (!url.startsWith("file:") || !url.includes("/sprskit.com/") || url.includes("/node_modules/")) {
+  if (!url.startsWith("file:") || url.includes("/node_modules/")) {
     return nextLoad(url, context);
   }
   if (!url.endsWith(".js")) return nextLoad(url, context);
