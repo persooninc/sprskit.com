@@ -6,8 +6,11 @@ const port = 3456;
 const base = `http://127.0.0.1:${port}`;
 
 function start() {
+  // Own process group: on Linux `npx` leaves `next-server` as a grandchild
+  // that holds the pipes open, so killing only `npx` hangs this script.
   const child = spawn("npx", ["next", "start", "-p", String(port)], {
     stdio: ["ignore", "pipe", "pipe"],
+    detached: true,
   });
   let logs = "";
   child.stdout.on("data", (chunk) => {
@@ -17,6 +20,16 @@ function start() {
     logs += chunk.toString();
   });
   return { child, readLogs: () => logs };
+}
+
+function stop(child) {
+  try {
+    process.kill(-child.pid, "SIGTERM");
+  } catch {
+    child.kill("SIGTERM");
+  }
+  child.stdout.destroy();
+  child.stderr.destroy();
 }
 
 async function waitForHealth(child) {
@@ -91,5 +104,5 @@ try {
   console.error(server.readLogs());
   throw error;
 } finally {
-  server.child.kill("SIGTERM");
+  stop(server.child);
 }
